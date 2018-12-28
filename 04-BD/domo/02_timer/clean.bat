@@ -1,0 +1,1 @@
+del *.o rtos.bin rtos.elf *.dis
