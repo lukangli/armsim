@@ -1,0 +1,727 @@
+说明：本文件为QEMU2.4.0.1版本，支持的arm型号及其外设的偏移地址清单。
+
+QEMU : Kzm
+    /* Memory map for Kzm Emulation Baseboard:
+     * 0x00000000-0x00003fff 16k secure ROM       IGNORED
+     * 0x00004000-0x00407fff Reserved             IGNORED
+     * 0x00404000-0x00407fff ROM                  IGNORED
+     * 0x00408000-0x0fffffff Reserved             IGNORED
+     * 0x10000000-0x1fffbfff RAM aliasing         IGNORED
+     * 0x1fffc000-0x1fffffff RAM                  EMULATED
+     * 0x20000000-0x2fffffff Reserved             IGNORED
+     * 0x30000000-0x7fffffff I.MX31 Internal Register Space
+     *   0x43f00000 IO_AREA0
+     *   0x43f90000 UART1                         EMULATED
+     *   0x43f94000 UART2                         EMULATED
+     *   0x68000000 AVIC                          EMULATED
+     *   0x53f80000 CCM                           EMULATED
+     *   0x53f94000 PIT 1                         EMULATED
+     *   0x53f98000 PIT 2                         EMULATED
+     *   0x53f90000 GPT                           EMULATED
+     * 0x80000000-0x87ffffff RAM                  EMULATED
+     * 0x88000000-0x8fffffff RAM Aliasing         EMULATED
+     * 0xa0000000-0xafffffff NAND Flash           IGNORED
+     * 0xb0000000-0xb3ffffff Unavailable          IGNORED
+     * 0xb4000000-0xb4000fff 8-bit free space     IGNORED
+     * 0xb4001000-0xb400100f Board control        IGNORED
+     *  0xb4001003           DIP switch
+     * 0xb4001010-0xb400101f 7-segment LED        IGNORED
+     * 0xb4001020-0xb400102f LED                  IGNORED
+     * 0xb4001030-0xb400103f LED                  IGNORED
+     * 0xb4001040-0xb400104f FPGA, UART           EMULATED
+     * 0xb4001050-0xb400105f FPGA, UART           EMULATED
+     * 0xb4001060-0xb40fffff FPGA                 IGNORED
+     * 0xb6000000-0xb61fffff LAN controller       EMULATED
+     * 0xb6200000-0xb62fffff FPGA NAND Controller IGNORED
+     * 0xb6300000-0xb7ffffff Free                 IGNORED
+     * 0xb8000000-0xb8004fff Memory control registers IGNORED
+     * 0xc0000000-0xc3ffffff PCMCIA/CF            IGNORED
+     * 0xc4000000-0xffffffff Reserved             IGNORED
+     */
+QEMU: Exynos4210 
+	#define EXYNOS4210_CHIPID_ADDR         0x10000000
+
+	/* PWM */
+	#define EXYNOS4210_PWM_BASE_ADDR       0x139D0000
+
+	/* RTC */
+	#define EXYNOS4210_RTC_BASE_ADDR       0x10070000
+
+	/* MCT */
+	#define EXYNOS4210_MCT_BASE_ADDR       0x10050000
+
+	/* I2C */
+	#define EXYNOS4210_I2C_SHIFT           0x00010000
+	#define EXYNOS4210_I2C_BASE_ADDR       0x13860000
+	/* Interrupt Group of External Interrupt Combiner for I2C */
+	#define EXYNOS4210_I2C_INTG            27
+	#define EXYNOS4210_HDMI_INTG           16
+
+	/* UART's definitions */
+	#define EXYNOS4210_UART0_BASE_ADDR     0x13800000
+	#define EXYNOS4210_UART1_BASE_ADDR     0x13810000
+	#define EXYNOS4210_UART2_BASE_ADDR     0x13820000
+	#define EXYNOS4210_UART3_BASE_ADDR     0x13830000
+	#define EXYNOS4210_UART0_FIFO_SIZE     256
+	#define EXYNOS4210_UART1_FIFO_SIZE     64
+	#define EXYNOS4210_UART2_FIFO_SIZE     16
+	#define EXYNOS4210_UART3_FIFO_SIZE     16
+	/* Interrupt Group of External Interrupt Combiner for UART */
+	#define EXYNOS4210_UART_INT_GRP        26
+
+	/* External GIC */
+	#define EXYNOS4210_EXT_GIC_CPU_BASE_ADDR    0x10480000
+	#define EXYNOS4210_EXT_GIC_DIST_BASE_ADDR   0x10490000
+
+	/* Combiner */
+	#define EXYNOS4210_EXT_COMBINER_BASE_ADDR   0x10440000
+	#define EXYNOS4210_INT_COMBINER_BASE_ADDR   0x10448000
+
+	/* PMU SFR base address */
+	#define EXYNOS4210_PMU_BASE_ADDR            0x10020000
+
+	/* Display controllers (FIMD) */
+	#define EXYNOS4210_FIMD0_BASE_ADDR          0x11C00000
+
+	/* EHCI */
+	#define EXYNOS4210_EHCI_BASE_ADDR           0x12580000
+QEMU: digic
+	#define DIGIC4_ROM0_BASE      0xf0000000
+	#define DIGIC4_ROM1_BASE      0xf8000000
+	#define DIGIC4_ROM_MAX_SIZE   0x08000000
+	#define DIGIC4_TIMER_BASE(n)    (0xc0210000 + (n) * 0x100)
+	#define DIGIC_UART_BASE          0xc0800000
+QEMU: mainstone
+	/* Device addresses */
+	#define MST_FPGA_PHYS	0x08000000
+	#define MST_ETH_PHYS	0x10000300
+	#define MST_FLASH_0		0x00000000
+	#define MST_FLASH_1		0x04000000
+QEMU: musicpal
+	#define MP_MISC_BASE            0x80002000
+	#define MP_MISC_SIZE            0x00001000
+
+	#define MP_ETH_BASE             0x80008000
+	#define MP_ETH_SIZE             0x00001000
+
+	#define MP_WLAN_BASE            0x8000C000
+	#define MP_WLAN_SIZE            0x00000800
+
+	#define MP_UART1_BASE           0x8000C840
+	#define MP_UART2_BASE           0x8000C940
+
+	#define MP_GPIO_BASE            0x8000D000
+	#define MP_GPIO_SIZE            0x00001000
+
+	#define MP_FLASHCFG_BASE        0x90006000
+	#define MP_FLASHCFG_SIZE        0x00001000
+
+	#define MP_AUDIO_BASE           0x90007000
+
+	#define MP_PIC_BASE             0x90008000
+	#define MP_PIC_SIZE             0x00001000
+
+	#define MP_PIT_BASE             0x90009000
+	#define MP_PIT_SIZE             0x00001000
+
+	#define MP_LCD_BASE             0x9000c000
+	#define MP_LCD_SIZE             0x00001000
+
+	#define MP_SRAM_BASE            0xC0000000
+	#define MP_SRAM_SIZE            0x00020000
+
+	#define MP_RAM_DEFAULT_SIZE     32*1024*1024
+	#define MP_FLASH_SIZE_MAX       32*1024*1024
+QEMU: nseries
+	/* GPIO pins */
+	#define N8X0_TUSB_ENABLE_GPIO		0
+	#define N800_MMC2_WP_GPIO		8
+	#define N800_UNKNOWN_GPIO0		9	/* out */
+	#define N810_MMC2_VIOSD_GPIO		9
+	#define N810_HEADSET_AMP_GPIO		10
+	#define N800_CAM_TURN_GPIO		12
+	#define N810_GPS_RESET_GPIO		12
+	#define N800_BLIZZARD_POWERDOWN_GPIO	15
+	#define N800_MMC1_WP_GPIO		23
+	#define N810_MMC2_VSD_GPIO		23
+	#define N8X0_ONENAND_GPIO		26
+	#define N810_BLIZZARD_RESET_GPIO	30
+	#define N800_UNKNOWN_GPIO2		53	/* out */
+	#define N8X0_TUSB_INT_GPIO		58
+	#define N8X0_BT_WKUP_GPIO		61
+	#define N8X0_STI_GPIO			62
+	#define N8X0_CBUS_SEL_GPIO		64
+	#define N8X0_CBUS_DAT_GPIO		65
+	#define N8X0_CBUS_CLK_GPIO		66
+	#define N8X0_WLAN_IRQ_GPIO		87
+	#define N8X0_BT_RESET_GPIO		92
+	#define N8X0_TEA5761_CS_GPIO		93
+	#define N800_UNKNOWN_GPIO		94
+	#define N810_TSC_RESET_GPIO		94
+	#define N800_CAM_ACT_GPIO		95
+	#define N810_GPS_WAKEUP_GPIO		95
+	#define N8X0_MMC_CS_GPIO		96
+	#define N8X0_WLAN_PWR_GPIO		97
+	#define N8X0_BT_HOST_WKUP_GPIO		98
+	#define N810_SPEAKER_AMP_GPIO		101
+	#define N810_KB_LOCK_GPIO		102
+	#define N800_TSC_TS_GPIO		103
+	#define N810_TSC_TS_GPIO		106
+	#define N8X0_HEADPHONE_GPIO		107
+	#define N8X0_RETU_GPIO			108
+	#define N800_TSC_KP_IRQ_GPIO		109
+	#define N810_KEYBOARD_GPIO		109
+	#define N800_BAT_COVER_GPIO		110
+	#define N810_SLIDE_GPIO			110
+	#define N8X0_TAHVO_GPIO			111
+	#define N800_UNKNOWN_GPIO4		112	/* out */
+	#define N810_SLEEPX_LED_GPIO		112
+	#define N800_TSC_RESET_GPIO		118	/* ? */
+	#define N810_AIC33_RESET_GPIO		118
+	#define N800_TSC_UNKNOWN_GPIO		119	/* out */
+	#define N8X0_TMP105_GPIO		125
+
+	/* Config */
+	#define BT_UART				0
+	#define XLDR_LL_UART			1
+
+	/* Addresses on the I2C bus 0 */
+	#define N810_TLV320AIC33_ADDR		0x18	/* Audio CODEC */
+	#define N8X0_TCM825x_ADDR		0x29	/* Camera */
+	#define N810_LP5521_ADDR		0x32	/* LEDs */
+	#define N810_TSL2563_ADDR		0x3d	/* Light sensor */
+	#define N810_LM8323_ADDR		0x45	/* Keyboard */
+	/* Addresses on the I2C bus 1 */
+	#define N8X0_TMP105_ADDR		0x48	/* Temperature sensor */
+	#define N8X0_MENELAUS_ADDR		0x72	/* Power management */
+
+	/* Chipselects on GPMC NOR interface */
+	#define N8X0_ONENAND_CS			0
+	#define N8X0_USB_ASYNC_CS		1
+	#define N8X0_USB_SYNC_CS		4
+
+	#define N8X0_BD_ADDR			0x00, 0x1a, 0x89, 0x9e, 0x3e, 0x81
+QEMU: omap_sx1
+	/* Siemens SX1 Cellphone V1 */
+	/* - ARM OMAP310 processor
+	 * - SRAM                192 kB
+	 * - SDRAM                32 MB at 0x10000000
+	 * - Boot flash           16 MB at 0x00000000
+	 * - Application flash     8 MB at 0x04000000
+	 * - 3 serial ports
+	 * - 1 SecureDigital
+	 * - 1 LCD display
+	 * - 1 RTC
+	 */
+
+	/*****************************************************************************/
+	/* Siemens SX1 Cellphone V2 */
+	/* - ARM OMAP310 processor
+	 * - SRAM                192 kB
+	 * - SDRAM                32 MB at 0x10000000
+	 * - Boot flash           32 MB at 0x00000000
+	 * - 3 serial ports
+	 * - 1 SecureDigital
+	 * - 1 LCD display
+	 * - 1 RTC
+	 */
+QEMU: omap1
+	/* Register mappings not currenlty implemented:
+     * MCSI2 Comm	fffb2000 - fffb27ff (not mapped on OMAP310)
+     * MCSI1 Bluetooth	fffb2800 - fffb2fff (not mapped on OMAP310)
+     * USB W2FC		fffb4000 - fffb47ff
+     * Camera Interface	fffb6800 - fffb6fff
+     * USB Host		fffba000 - fffba7ff
+     * FAC		fffba800 - fffbafff
+     * HDQ/1-Wire	fffbc000 - fffbc7ff
+     * TIPB switches	fffbc800 - fffbcfff
+     * Mailbox		fffcf000 - fffcf7ff
+     * Local bus IF	fffec100 - fffec1ff
+     * Local bus MMU	fffec200 - fffec2ff
+     * DSP MMU		fffed200 - fffed2ff
+     */
+QEMU: omap2
+	/* All register mappings (includin those not currenlty implemented):
+     * SystemControlMod	48000000 - 48000fff
+     * SystemControlL4	48001000 - 48001fff
+     * 32kHz Timer Mod	48004000 - 48004fff
+     * 32kHz Timer L4	48005000 - 48005fff
+     * PRCM ModA	48008000 - 480087ff
+     * PRCM ModB	48008800 - 48008fff
+     * PRCM L4		48009000 - 48009fff
+     * TEST-BCM Mod	48012000 - 48012fff
+     * TEST-BCM L4	48013000 - 48013fff
+     * TEST-TAP Mod	48014000 - 48014fff
+     * TEST-TAP L4	48015000 - 48015fff
+     * GPIO1 Mod	48018000 - 48018fff
+     * GPIO Top		48019000 - 48019fff
+     * GPIO2 Mod	4801a000 - 4801afff
+     * GPIO L4		4801b000 - 4801bfff
+     * GPIO3 Mod	4801c000 - 4801cfff
+     * GPIO4 Mod	4801e000 - 4801efff
+     * WDTIMER1 Mod	48020000 - 48010fff
+     * WDTIMER Top	48021000 - 48011fff
+     * WDTIMER2 Mod	48022000 - 48012fff
+     * WDTIMER L4	48023000 - 48013fff
+     * WDTIMER3 Mod	48024000 - 48014fff
+     * WDTIMER3 L4	48025000 - 48015fff
+     * WDTIMER4 Mod	48026000 - 48016fff
+     * WDTIMER4 L4	48027000 - 48017fff
+     * GPTIMER1 Mod	48028000 - 48018fff
+     * GPTIMER1 L4	48029000 - 48019fff
+     * GPTIMER2 Mod	4802a000 - 4801afff
+     * GPTIMER2 L4	4802b000 - 4801bfff
+     * L4-Config AP	48040000 - 480407ff
+     * L4-Config IP	48040800 - 48040fff
+     * L4-Config LA	48041000 - 48041fff
+     * ARM11ETB Mod	48048000 - 48049fff
+     * ARM11ETB L4	4804a000 - 4804afff
+     * DISPLAY Top	48050000 - 480503ff
+     * DISPLAY DISPC	48050400 - 480507ff
+     * DISPLAY RFBI	48050800 - 48050bff
+     * DISPLAY VENC	48050c00 - 48050fff
+     * DISPLAY L4	48051000 - 48051fff
+     * CAMERA Top	48052000 - 480523ff
+     * CAMERA core	48052400 - 480527ff
+     * CAMERA DMA	48052800 - 48052bff
+     * CAMERA MMU	48052c00 - 48052fff
+     * CAMERA L4	48053000 - 48053fff
+     * SDMA Mod		48056000 - 48056fff
+     * SDMA L4		48057000 - 48057fff
+     * SSI Top		48058000 - 48058fff
+     * SSI GDD		48059000 - 48059fff
+     * SSI Port1	4805a000 - 4805afff
+     * SSI Port2	4805b000 - 4805bfff
+     * SSI L4		4805c000 - 4805cfff
+     * USB Mod		4805e000 - 480fefff
+     * USB L4		4805f000 - 480fffff
+     * WIN_TRACER1 Mod	48060000 - 48060fff
+     * WIN_TRACER1 L4	48061000 - 48061fff
+     * WIN_TRACER2 Mod	48062000 - 48062fff
+     * WIN_TRACER2 L4	48063000 - 48063fff
+     * WIN_TRACER3 Mod	48064000 - 48064fff
+     * WIN_TRACER3 L4	48065000 - 48065fff
+     * WIN_TRACER4 Top	48066000 - 480660ff
+     * WIN_TRACER4 ETT	48066100 - 480661ff
+     * WIN_TRACER4 WT	48066200 - 480662ff
+     * WIN_TRACER4 L4	48067000 - 48067fff
+     * XTI Mod		48068000 - 48068fff
+     * XTI L4		48069000 - 48069fff
+     * UART1 Mod	4806a000 - 4806afff
+     * UART1 L4		4806b000 - 4806bfff
+     * UART2 Mod	4806c000 - 4806cfff
+     * UART2 L4		4806d000 - 4806dfff
+     * UART3 Mod	4806e000 - 4806efff
+     * UART3 L4		4806f000 - 4806ffff
+     * I2C1 Mod		48070000 - 48070fff
+     * I2C1 L4		48071000 - 48071fff
+     * I2C2 Mod		48072000 - 48072fff
+     * I2C2 L4		48073000 - 48073fff
+     * McBSP1 Mod	48074000 - 48074fff
+     * McBSP1 L4	48075000 - 48075fff
+     * McBSP2 Mod	48076000 - 48076fff
+     * McBSP2 L4	48077000 - 48077fff
+     * GPTIMER3 Mod	48078000 - 48078fff
+     * GPTIMER3 L4	48079000 - 48079fff
+     * GPTIMER4 Mod	4807a000 - 4807afff
+     * GPTIMER4 L4	4807b000 - 4807bfff
+     * GPTIMER5 Mod	4807c000 - 4807cfff
+     * GPTIMER5 L4	4807d000 - 4807dfff
+     * GPTIMER6 Mod	4807e000 - 4807efff
+     * GPTIMER6 L4	4807f000 - 4807ffff
+     * GPTIMER7 Mod	48080000 - 48080fff
+     * GPTIMER7 L4	48081000 - 48081fff
+     * GPTIMER8 Mod	48082000 - 48082fff
+     * GPTIMER8 L4	48083000 - 48083fff
+     * GPTIMER9 Mod	48084000 - 48084fff
+     * GPTIMER9 L4	48085000 - 48085fff
+     * GPTIMER10 Mod	48086000 - 48086fff
+     * GPTIMER10 L4	48087000 - 48087fff
+     * GPTIMER11 Mod	48088000 - 48088fff
+     * GPTIMER11 L4	48089000 - 48089fff
+     * GPTIMER12 Mod	4808a000 - 4808afff
+     * GPTIMER12 L4	4808b000 - 4808bfff
+     * EAC Mod		48090000 - 48090fff
+     * EAC L4		48091000 - 48091fff
+     * FAC Mod		48092000 - 48092fff
+     * FAC L4		48093000 - 48093fff
+     * MAILBOX Mod	48094000 - 48094fff
+     * MAILBOX L4	48095000 - 48095fff
+     * SPI1 Mod		48098000 - 48098fff
+     * SPI1 L4		48099000 - 48099fff
+     * SPI2 Mod		4809a000 - 4809afff
+     * SPI2 L4		4809b000 - 4809bfff
+     * MMC/SDIO Mod	4809c000 - 4809cfff
+     * MMC/SDIO L4	4809d000 - 4809dfff
+     * MS_PRO Mod	4809e000 - 4809efff
+     * MS_PRO L4	4809f000 - 4809ffff
+     * RNG Mod		480a0000 - 480a0fff
+     * RNG L4		480a1000 - 480a1fff
+     * DES3DES Mod	480a2000 - 480a2fff
+     * DES3DES L4	480a3000 - 480a3fff
+     * SHA1MD5 Mod	480a4000 - 480a4fff
+     * SHA1MD5 L4	480a5000 - 480a5fff
+     * AES Mod		480a6000 - 480a6fff
+     * AES L4		480a7000 - 480a7fff
+     * PKA Mod		480a8000 - 480a9fff
+     * PKA L4		480aa000 - 480aafff
+     * MG Mod		480b0000 - 480b0fff
+     * MG L4		480b1000 - 480b1fff
+     * HDQ/1-wire Mod	480b2000 - 480b2fff
+     * HDQ/1-wire L4	480b3000 - 480b3fff
+     * MPU interrupt	480fe000 - 480fefff
+     * STI channel base	54000000 - 5400ffff
+     * IVA RAM		5c000000 - 5c01ffff
+     * IVA ROM		5c020000 - 5c027fff
+     * IMG_BUF_A	5c040000 - 5c040fff
+     * IMG_BUF_B	5c042000 - 5c042fff
+     * VLCDS		5c048000 - 5c0487ff
+     * IMX_COEF		5c049000 - 5c04afff
+     * IMX_CMD		5c051000 - 5c051fff
+     * VLCDQ		5c053000 - 5c0533ff
+     * VLCDH		5c054000 - 5c054fff
+     * SEQ_CMD		5c055000 - 5c055fff
+     * IMX_REG		5c056000 - 5c0560ff
+     * VLCD_REG		5c056100 - 5c0561ff
+     * SEQ_REG		5c056200 - 5c0562ff
+     * IMG_BUF_REG	5c056300 - 5c0563ff
+     * SEQIRQ_REG	5c056400 - 5c0564ff
+     * OCP_REG		5c060000 - 5c060fff
+     * SYSC_REG		5c070000 - 5c070fff
+     * MMU_REG		5d000000 - 5d000fff
+     * sDMA R		68000400 - 680005ff
+     * sDMA W		68000600 - 680007ff
+     * Display Control	68000800 - 680009ff
+     * DSP subsystem	68000a00 - 68000bff
+     * MPU subsystem	68000c00 - 68000dff
+     * IVA subsystem	68001000 - 680011ff
+     * USB		68001200 - 680013ff
+     * Camera		68001400 - 680015ff
+     * VLYNQ (firewall)	68001800 - 68001bff
+     * VLYNQ		68001e00 - 68001fff
+     * SSI		68002000 - 680021ff
+     * L4		68002400 - 680025ff
+     * DSP (firewall)	68002800 - 68002bff
+     * DSP subsystem	68002e00 - 68002fff
+     * IVA (firewall)	68003000 - 680033ff
+     * IVA		68003600 - 680037ff
+     * GFX		68003a00 - 68003bff
+     * CMDWR emulation	68003c00 - 68003dff
+     * SMS		68004000 - 680041ff
+     * OCM		68004200 - 680043ff
+     * GPMC		68004400 - 680045ff
+     * RAM (firewall)	68005000 - 680053ff
+     * RAM (err login)	68005400 - 680057ff
+     * ROM (firewall)	68005800 - 68005bff
+     * ROM (err login)	68005c00 - 68005fff
+     * GPMC (firewall)	68006000 - 680063ff
+     * GPMC (err login)	68006400 - 680067ff
+     * SMS (err login)	68006c00 - 68006fff
+     * SMS registers	68008000 - 68008fff
+     * SDRC registers	68009000 - 68009fff
+     * GPMC registers	6800a000   6800afff
+     */
+QEMU:palm
+	/* Shared GPIOs */
+	#define PALMTE_USBDETECT_GPIO	0
+	#define PALMTE_USB_OR_DC_GPIO	1
+	#define PALMTE_TSC_GPIO		4
+	#define PALMTE_PINTDAV_GPIO	6
+	#define PALMTE_MMC_WP_GPIO	8
+	#define PALMTE_MMC_POWER_GPIO	9
+	#define PALMTE_HDQ_GPIO		11
+	#define PALMTE_HEADPHONES_GPIO	14
+	#define PALMTE_SPEAKER_GPIO	15
+	/* MPU private GPIOs */
+	#define PALMTE_DC_GPIO		2
+	#define PALMTE_MMC_SWITCH_GPIO	4
+	#define PALMTE_MMC1_GPIO	6
+	#define PALMTE_MMC2_GPIO	7
+	#define PALMTE_MMC3_GPIO	11
+QEMU:pxa2xx
+	#define PMCR	0x00	/* Power Manager Control register */
+	#define PSSR	0x04	/* Power Manager Sleep Status register */
+	#define PSPR	0x08	/* Power Manager Scratch-Pad register */
+	#define PWER	0x0c	/* Power Manager Wake-Up Enable register */
+	#define PRER	0x10	/* Power Manager Rising-Edge Detect Enable register */
+	#define PFER	0x14	/* Power Manager Falling-Edge Detect Enable register */
+	#define PEDR	0x18	/* Power Manager Edge-Detect Status register */
+	#define PCFR	0x1c	/* Power Manager General Configuration register */
+	#define PGSR0	0x20	/* Power Manager GPIO Sleep-State register 0 */
+	#define PGSR1	0x24	/* Power Manager GPIO Sleep-State register 1 */
+	#define PGSR2	0x28	/* Power Manager GPIO Sleep-State register 2 */
+	#define PGSR3	0x2c	/* Power Manager GPIO Sleep-State register 3 */
+	#define RCSR	0x30	/* Reset Controller Status register */
+	#define PSLR	0x34	/* Power Manager Sleep Configuration register */
+	#define PTSR	0x38	/* Power Manager Standby Configuration register */
+	#define PVCR	0x40	/* Power Manager Voltage Change Control register */
+	#define PUCR	0x4c	/* Power Manager USIM Card Control/Status register */
+	#define PKWR	0x50	/* Power Manager Keyboard Wake-Up Enable register */
+	#define PKSR	0x54	/* Power Manager Keyboard Level-Detect Status */
+	#define PCMD0	0x80	/* Power Manager I2C Command register File 0 */
+	#define PCMD31	0xfc	/* Power Manager I2C Command register File 31 */
+	#define MDCNFG		0x00	/* SDRAM Configuration register */
+	#define MDREFR		0x04	/* SDRAM Refresh Control register */
+	#define MSC0		0x08	/* Static Memory Control register 0 */
+	#define MSC1		0x0c	/* Static Memory Control register 1 */
+	#define MSC2		0x10	/* Static Memory Control register 2 */
+	#define MECR		0x14	/* Expansion Memory Bus Config register */
+	#define SXCNFG		0x1c	/* Synchronous Static Memory Config register */
+	#define MCMEM0		0x28	/* PC Card Memory Socket 0 Timing register */
+	#define MCMEM1		0x2c	/* PC Card Memory Socket 1 Timing register */
+	#define MCATT0		0x30	/* PC Card Attribute Socket 0 register */
+	#define MCATT1		0x34	/* PC Card Attribute Socket 1 register */
+	#define MCIO0		0x38	/* PC Card I/O Socket 0 Timing register */
+	#define MCIO1		0x3c	/* PC Card I/O Socket 1 Timing register */
+	#define MDMRS		0x40	/* SDRAM Mode Register Set Config register */
+	#define BOOT_DEF	0x44	/* Boot-time Default Configuration register */
+	#define ARB_CNTL	0x48	/* Arbiter Control register */
+	#define BSCNTR0		0x4c	/* Memory Buffer Strength Control register 0 */
+	#define BSCNTR1		0x50	/* Memory Buffer Strength Control register 1 */
+	#define LCDBSCNTR	0x54	/* LCD Buffer Strength Control register */
+	#define MDMRSLP		0x58	/* Low Power SDRAM Mode Set Config register */
+	#define BSCNTR2		0x5c	/* Memory Buffer Strength Control register 2 */
+	#define BSCNTR3		0x60	/* Memory Buffer Strength Control register 3 */
+	#define SA1110		0x64	/* SA-1110 Memory Compatibility register */
+	/* Real-Time Clock */
+	#define RCNR		0x00	/* RTC Counter register */
+	#define RTAR		0x04	/* RTC Alarm register */
+	#define RTSR		0x08	/* RTC Status register */
+	#define RTTR		0x0c	/* RTC Timer Trim register */
+	#define RDCR		0x10	/* RTC Day Counter register */
+	#define RYCR		0x14	/* RTC Year Counter register */
+	#define RDAR1		0x18	/* RTC Wristwatch Day Alarm register 1 */
+	#define RYAR1		0x1c	/* RTC Wristwatch Year Alarm register 1 */
+	#define RDAR2		0x20	/* RTC Wristwatch Day Alarm register 2 */
+	#define RYAR2		0x24	/* RTC Wristwatch Year Alarm register 2 */
+	#define SWCR		0x28	/* RTC Stopwatch Counter register */
+	#define SWAR1		0x2c	/* RTC Stopwatch Alarm register 1 */
+	#define SWAR2		0x30	/* RTC Stopwatch Alarm register 2 */
+	#define RTCPICR		0x34	/* RTC Periodic Interrupt Counter register */
+	#define PIAR		0x38	/* RTC Periodic Interrupt Alarm register */
+	#define IBMR	0x80	/* I2C Bus Monitor register */
+	
+	#define IDBR	0x88	/* I2C Data Buffer register */
+	#define ICR	0x90	/* I2C Control register */
+	#define ISR	0x98	/* I2C Status register */
+	#define ISAR	0xa0	/* I2C Slave Address register */
+QEMU:strongarm
+	#define SA_CS0          0x00000000
+	#define SA_CS1          0x08000000
+	#define SA_CS2          0x10000000
+	#define SA_CS3          0x18000000
+	#define SA_PCMCIA_CS0   0x20000000
+	#define SA_PCMCIA_CS1   0x30000000
+	#define SA_CS4          0x40000000
+	#define SA_CS5          0x48000000
+	/* system registers here */
+	#define SA_SDCS0        0xc0000000
+	#define SA_SDCS1        0xc8000000
+	#define SA_SDCS2        0xd0000000
+	#define SA_SDCS3        0xd8000000
+	/* UART Ports */
+	#define UTCR0 0x00
+	#define UTCR1 0x04
+	#define UTCR2 0x08
+	#define UTCR3 0x0c
+	#define UTDR  0x14
+	#define UTSR0 0x1c
+	#define UTSR1 0x20
+
+	#define UTCR0_PE  (1 << 0) /* Parity enable */
+	#define UTCR0_OES (1 << 1) /* Even parity */
+	#define UTCR0_SBS (1 << 2) /* 2 stop bits */
+	#define UTCR0_DSS (1 << 3) /* 8-bit data */
+
+	#define UTCR3_RXE (1 << 0) /* Rx enable */
+	#define UTCR3_TXE (1 << 1) /* Tx enable */
+	#define UTCR3_BRK (1 << 2) /* Force Break */
+	#define UTCR3_RIE (1 << 3) /* Rx int enable */
+	#define UTCR3_TIE (1 << 4) /* Tx int enable */
+	#define UTCR3_LBM (1 << 5) /* Loopback */
+
+	#define UTSR0_TFS (1 << 0) /* Tx FIFO nearly empty */
+	#define UTSR0_RFS (1 << 1) /* Rx FIFO nearly full */
+	#define UTSR0_RID (1 << 2) /* Receiver Idle */
+	#define UTSR0_RBB (1 << 3) /* Receiver begin break */
+	#define UTSR0_REB (1 << 4) /* Receiver end break */
+	#define UTSR0_EIF (1 << 5) /* Error in FIFO */
+
+	#define UTSR1_RNE (1 << 1) /* Receive FIFO not empty */
+	#define UTSR1_TNF (1 << 2) /* Transmit FIFO not full */
+	#define UTSR1_PRE (1 << 3) /* Parity error */
+	#define UTSR1_FRE (1 << 4) /* Frame error */
+	#define UTSR1_ROR (1 << 5) /* Receive Over Run */
+
+	#define RX_FIFO_PRE (1 << 8)
+	#define RX_FIFO_FRE (1 << 9)
+	#define RX_FIFO_ROR (1 << 10)
+QEMU: tosa
+	#define TOSA_RAM    0x04000000
+	#define TOSA_ROM	0x00800000
+
+	#define TOSA_GPIO_USB_IN		(5)
+	#define TOSA_GPIO_nSD_DETECT	(9)
+	#define TOSA_GPIO_ON_RESET		(19)
+	#define TOSA_GPIO_CF_IRQ		(21)	/* CF slot0 Ready */
+	#define TOSA_GPIO_CF_CD			(13)
+	#define TOSA_GPIO_TC6393XB_INT  (15)
+	#define TOSA_GPIO_JC_CF_IRQ		(36)	/* CF slot1 Ready */
+
+	#define TOSA_SCOOP_GPIO_BASE	1
+	#define TOSA_GPIO_IR_POWERDWN	(TOSA_SCOOP_GPIO_BASE + 2)
+	#define TOSA_GPIO_SD_WP			(TOSA_SCOOP_GPIO_BASE + 3)
+	#define TOSA_GPIO_PWR_ON		(TOSA_SCOOP_GPIO_BASE + 4)
+
+	#define TOSA_SCOOP_JC_GPIO_BASE		1
+	#define TOSA_GPIO_BT_LED		(TOSA_SCOOP_JC_GPIO_BASE + 0)
+	#define TOSA_GPIO_NOTE_LED		(TOSA_SCOOP_JC_GPIO_BASE + 1)
+	#define TOSA_GPIO_CHRG_ERR_LED		(TOSA_SCOOP_JC_GPIO_BASE + 2)
+	#define TOSA_GPIO_TC6393XB_L3V_ON	(TOSA_SCOOP_JC_GPIO_BASE + 5)
+	#define TOSA_GPIO_WLAN_LED		(TOSA_SCOOP_JC_GPIO_BASE + 7)
+QEMU:versatilepb
+	/* Memory map for Versatile/PB:  */
+    /* 0x10000000 System registers.  */
+    /* 0x10001000 PCI controller config registers.  */
+    /* 0x10002000 Serial bus interface.  */
+    /*  0x10003000 Secondary interrupt controller.  */
+    /* 0x10004000 AACI (audio).  */
+    /*  0x10005000 MMCI0.  */
+    /*  0x10006000 KMI0 (keyboard).  */
+    /*  0x10007000 KMI1 (mouse).  */
+    /* 0x10008000 Character LCD Interface.  */
+    /*  0x10009000 UART3.  */
+    /* 0x1000a000 Smart card 1.  */
+    /*  0x1000b000 MMCI1.  */
+    /*  0x10010000 Ethernet.  */
+    /* 0x10020000 USB.  */
+    /* 0x10100000 SSMC.  */
+    /* 0x10110000 MPMC.  */
+    /*  0x10120000 CLCD Controller.  */
+    /*  0x10130000 DMA Controller.  */
+    /*  0x10140000 Vectored interrupt controller.  */
+    /* 0x101d0000 AHB Monitor Interface.  */
+    /* 0x101e0000 System Controller.  */
+    /* 0x101e1000 Watchdog Interface.  */
+    /* 0x101e2000 Timer 0/1.  */
+    /* 0x101e3000 Timer 2/3.  */
+    /* 0x101e4000 GPIO port 0.  */
+    /* 0x101e5000 GPIO port 1.  */
+    /* 0x101e6000 GPIO port 2.  */
+    /* 0x101e7000 GPIO port 3.  */
+    /* 0x101e8000 RTC.  */
+    /* 0x101f0000 Smart card 0.  */
+    /*  0x101f1000 UART0.  */
+    /*  0x101f2000 UART1.  */
+    /*  0x101f3000 UART2.  */
+    /* 0x101f4000 SSPI.  */
+    /* 0x34000000 NOR Flash */
+QEMU:vexpress
+	[VE_NORFLASHALIAS] = 0,
+    /* CS7: 0x10000000 .. 0x10020000 */
+    [VE_SYSREGS] = 0x10000000,
+    [VE_SP810] = 0x10001000,
+    [VE_SERIALPCI] = 0x10002000,
+    [VE_PL041] = 0x10004000,
+    [VE_MMCI] = 0x10005000,
+    [VE_KMI0] = 0x10006000,
+    [VE_KMI1] = 0x10007000,
+    [VE_UART0] = 0x10009000,
+    [VE_UART1] = 0x1000a000,
+    [VE_UART2] = 0x1000b000,
+    [VE_UART3] = 0x1000c000,
+    [VE_WDT] = 0x1000f000,
+    [VE_TIMER01] = 0x10011000,
+    [VE_TIMER23] = 0x10012000,
+    [VE_VIRTIO] = 0x10013000,
+    [VE_SERIALDVI] = 0x10016000,
+    [VE_RTC] = 0x10017000,
+    [VE_COMPACTFLASH] = 0x1001a000,
+    [VE_CLCD] = 0x1001f000,
+    /* CS0: 0x40000000 .. 0x44000000 */
+    [VE_NORFLASH0] = 0x40000000,
+    /* CS1: 0x44000000 .. 0x48000000 */
+    [VE_NORFLASH1] = 0x44000000,
+    /* CS2: 0x48000000 .. 0x4a000000 */
+    [VE_SRAM] = 0x48000000,
+    /* CS3: 0x4c000000 .. 0x50000000 */
+    [VE_VIDEORAM] = 0x4c000000,
+    [VE_ETHERNET] = 0x4e000000,
+    [VE_USB] = 0x4f000000,
+	
+	[VE_NORFLASHALIAS] = 0,
+    /* CS0: 0x08000000 .. 0x0c000000 */
+    [VE_NORFLASH0] = 0x08000000,
+    /* CS4: 0x0c000000 .. 0x10000000 */
+    [VE_NORFLASH1] = 0x0c000000,
+    /* CS5: 0x10000000 .. 0x14000000 */
+    /* CS1: 0x14000000 .. 0x18000000 */
+    [VE_SRAM] = 0x14000000,
+    /* CS2: 0x18000000 .. 0x1c000000 */
+    [VE_VIDEORAM] = 0x18000000,
+    [VE_ETHERNET] = 0x1a000000,
+    [VE_USB] = 0x1b000000,
+    /* CS3: 0x1c000000 .. 0x20000000 */
+    [VE_DAPROM] = 0x1c000000,
+    [VE_SYSREGS] = 0x1c010000,
+    [VE_SP810] = 0x1c020000,
+    [VE_SERIALPCI] = 0x1c030000,
+    [VE_PL041] = 0x1c040000,
+    [VE_MMCI] = 0x1c050000,
+    [VE_KMI0] = 0x1c060000,
+    [VE_KMI1] = 0x1c070000,
+    [VE_UART0] = 0x1c090000,
+    [VE_UART1] = 0x1c0a0000,
+    [VE_UART2] = 0x1c0b0000,
+    [VE_UART3] = 0x1c0c0000,
+    [VE_WDT] = 0x1c0f0000,
+    [VE_TIMER01] = 0x1c110000,
+    [VE_TIMER23] = 0x1c120000,
+    [VE_VIRTIO] = 0x1c130000,
+    [VE_SERIALDVI] = 0x1c160000,
+    [VE_RTC] = 0x1c170000,
+    [VE_COMPACTFLASH] = 0x1c1a0000,
+    [VE_CLCD] = 0x1c1f0000,
+QEMU:virt
+	/* Addresses and sizes of our components.
+	 * 0..128MB is space for a flash device so we can run bootrom code such as UEFI.
+	 * 128MB..256MB is used for miscellaneous device I/O.
+	 * 256MB..1GB is reserved for possible future PCI support (ie where the
+	 * PCI memory window will go if we add a PCI host controller).
+	 * 1GB and up is RAM (which may happily spill over into the
+	 * high memory region beyond 4GB).
+	 * This represents a compromise between how much RAM can be given to
+	 * a 32 bit VM and leaving space for expansion and in particular for PCI.
+	 * Note that devices should generally be placed at multiples of 0x10000,
+	 * to accommodate guests using 64K pages.
+	*/
+	/* Space up to 0x8000000 is reserved for a boot ROM */
+    [VIRT_FLASH] =              {          0, 0x08000000 },
+    [VIRT_CPUPERIPHS] =         { 0x08000000, 0x00020000 },
+    /* GIC distributor and CPU interfaces sit inside the CPU peripheral space */
+    [VIRT_GIC_DIST] =           { 0x08000000, 0x00010000 },
+    [VIRT_GIC_CPU] =            { 0x08010000, 0x00010000 },
+    [VIRT_GIC_V2M] =            { 0x08020000, 0x00001000 },
+    [VIRT_UART] =               { 0x09000000, 0x00001000 },
+    [VIRT_RTC] =                { 0x09010000, 0x00001000 },
+    [VIRT_FW_CFG] =             { 0x09020000, 0x0000000a },
+    [VIRT_MMIO] =               { 0x0a000000, 0x00000200 },
+    /* ...repeating for a total of NUM_VIRTIO_TRANSPORTS, each of that size */
+    [VIRT_PLATFORM_BUS] =       { 0x0c000000, 0x02000000 },
+    [VIRT_PCIE_MMIO] =          { 0x10000000, 0x2eff0000 },
+    [VIRT_PCIE_PIO] =           { 0x3eff0000, 0x00010000 },
+    [VIRT_PCIE_ECAM] =          { 0x3f000000, 0x01000000 },
+    [VIRT_MEM] =                { 0x40000000, 30ULL * 1024 * 1024 * 1024 },
+	
+	[VIRT_UART] = 1,
+    [VIRT_RTC] = 2,
+    [VIRT_PCIE] = 3, /* ... to 6 */
+    [VIRT_MMIO] = 16, /* ...to 16 + NUM_VIRTIO_TRANSPORTS - 1 */
+    [VIRT_GIC_V2M] = 48, /* ...to 48 + NUM_GICV2M_SPIS - 1 */
+    [VIRT_PLATFORM_BUS] = 112, /* ...to 112 + PLATFORM_BUS_NUM_IRQS -1 */
+QEMU: xilinx_zynq
+	#define MPCORE_PERIPHBASE 0xF8F00000
+	#define ZYNQ_BOARD_MIDR 0x413FC090
+	"xlnx,ps7-usb", 0xE0002000"
+	"xlnx,ps7-usb", 0xE0003000"
+	"cadence_uart", 0xE0000000"
