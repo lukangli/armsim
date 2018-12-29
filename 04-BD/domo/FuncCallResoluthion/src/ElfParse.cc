@@ -129,6 +129,56 @@ int symbolTableAnalysis(string listFilePath)
 	return 0;
 }
 
+//vector<int,string>f;
+/**
+ * 遍历容器，判断所给字符串是否是容器中的函数
+ */
+void traversTheContainer(const char * str,int& line)
+{
+	int i = 0;
+	int j = 0;
+	int ret = 0;
+	for(i = 0; i < (int)funclist.size(); i++)
+	{
+		ret = strcmp(funclist[i].name.data(),str);
+		//这里需要多加一个字符串判空，去掉多余的不是函数调用的串
+		if((0 == ret) && (0 != strlen(str)))
+		{
+			//遍历容器选出在一个函数内调用的函数
+			for(j = 0;j < (int)funclist.size(); j++)
+			{
+				if(funclist[j].lineNum < line && funclist[j+1].lineNum > line)
+				{
+					cout<<funclist[j].name<<" "<<str<<" "<<line+6<<endl;
+					//break;
+				}
+			}
+			//cout<<line<<" "<<str<<endl;
+		}
+	}
+}
+
+/**
+ * 判断字符串中是否有跳转指令
+ */
+void strMatch(char* data, int& line)
+{
+	int i = 0;
+	string str(data);
+	string::size_type position = 0; //find函数的返回标志
+	char jumpInstruc[2][10] = {"bl","b.n"}; //跳转指令数组
+	char arr[100] = {0};
+	for(i = 0; i < 2; i++)
+	{
+		position = str.find(jumpInstruc[i]);
+		if(position != str.npos)
+		{
+			sscanf(data,"%*[^<]<%[^>]",arr);
+			//cout<<arr<<endl;
+			traversTheContainer(arr,line);
+		}
+	}
+}
 /**
  * 函数名： jumpDetection
  * 函数参数：filePath 所要解析文件流
@@ -143,6 +193,20 @@ int jumpDetection(ifstream& file)
 	{
 		cout<<"fail to open the file"<<endl;
 		return -1;
+	}
+	//记录行号
+	int record = 0;
+	char data[255] = {0};
+	while(true)
+	{
+		//获取一行进行解析
+		file.getline(data,sizeof(data));
+		strMatch(data,record);
+		if(file.eof())
+		{
+			break;
+		}
+		record++;
 	}
 	return 0;
 }
@@ -183,7 +247,7 @@ int lineNumResolu(ifstream& file)
 		string str(data);
 		/*
 		 * FIXME :这里为了优化性能，只对函数的地址信息进行匹配可能会出bug需要后期解决
-		 * 出bug的原因函数中可能会后立即数或者其他的数与某个函数的地址信息一致
+		 * 出bug的原因函数中可能会有立即数或者其他的数与某个函数的地址信息一致
 		 */
 		sprintf(funcLine,"%08x",funclist[i].address);
 		//sprintf(funcLine,"%08x <%s>:",funclist[i].address,funclist[i].name.data());
@@ -200,7 +264,11 @@ int lineNumResolu(ifstream& file)
 			break;
 		}
 	}
-#define debug
+	//多加一项
+	struct funcInfo * func = new funcInfo;
+	func->lineNum = 4525;
+	funclist.push_back(*func);
+//#define debug
 #if defined(debug)
 	char arr1[40];
 	sort(funclist.begin(),funclist.end(),cmpAddr);
@@ -253,7 +321,7 @@ int disassemblyAnalysis(string dumpFilePath)
 		if(position != flag.npos)
 		{
 			//记录text段开始的位置
-			pos = disassemblyFile.tellg();
+			pos = (int)disassemblyFile.tellg() - 13;
 			break;
 		}
 	}
@@ -264,7 +332,7 @@ int disassemblyAnalysis(string dumpFilePath)
 		cout<<"Line number resolution failed"<<endl;
 		return -1;
 	}
-	//将文件指针复位到text段开始的位置
+	//将文件指针复位到.text段开始的位置
 	disassemblyFile.seekg(pos);
 	//解析函数跳转
 	ret = jumpDetection(disassemblyFile);
