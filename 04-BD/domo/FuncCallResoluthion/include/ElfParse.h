@@ -15,24 +15,24 @@
 #include <vector>
 #include <string.h>
 #include <algorithm>
+#include <map>
 using namespace std;
-
+#define FUNCNUMMIX 256
 
 //定义一个结构，用于保存解析符号表得到的信息
-struct funcInfo
+typedef struct funcinfo
 {
 	int address; //地址
 	string name; //函数名
 	int lineNum; //函数的入口地址在文件中的行号
-};
+}funcInfo;
 
 //定义一个结构，用于保存函数调用信息
-struct callInfo
+typedef struct callinfo
 {
-	//funcInfo func[];//记录被调用的函数信息
+	funcInfo *func[FUNCNUMMIX];//记录被调用的函数信息
 	string name;    //记录调用者的名字
-	int callNum;    //记录调用的行号
-};
+}callInfo;
 
 /**
  * 函数名： elfParseInit

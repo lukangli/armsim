@@ -55,12 +55,12 @@ bool elfParseInit(string filePath)
  * 一行字符的格式如下:
  * 10: 00000009     0 FUNC    LOCAL  DEFAULT    1 start
  */
-vector<struct funcInfo>funclist; //保存读到的函数信息的容器
+vector<funcInfo>funclist; //保存读到的函数信息的容器
 int symbolTableStringAnalysis(string oneline)
 {
 	char funcline[255] = {0};
 	char funcname[60];
-	struct funcInfo * func = new funcInfo;
+	funcInfo * func = new funcInfo;
 	strncpy(funcline,oneline.data(),sizeof(funcline));
 	//跳过字符串中间的无用字符
 	sscanf(funcline,"%*s %08x %*[^ ] %*[^ ] %*[^ ] "
@@ -128,8 +128,9 @@ int symbolTableAnalysis(string listFilePath)
 	symbolTableFile.close();
 	return 0;
 }
+vector<callInfo>callInfoList; //保存函数调用关系信息的容器
 
-//vector<int,string>f;
+map<string,int>mainFunc; //主调函数
 /**
  * 遍历容器，判断所给字符串是否是容器中的函数
  */
@@ -149,15 +150,28 @@ void traversTheContainer(const char * str,int& line)
 			{
 				if(funclist[j].lineNum < line && funclist[j+1].lineNum > line)
 				{
-					cout<<funclist[j].name<<" "<<str<<" "<<line+6<<endl;
-					//break;
+					static int num = 0;
+					mainFunc.insert(map<string,int>::value_type(funclist[j].name,num++));
+					//cout<<funclist[j].name<<" "<<funclist[i].name<<" "<<line+6<<endl;
 				}
 			}
-			//cout<<line<<" "<<str<<endl;
 		}
 	}
 }
 
+void funcPrint()
+{
+	map<string,int>::iterator pIter;
+	for(pIter = mainFunc.begin(); pIter != mainFunc.end();pIter++)
+	{
+		cout<<pIter->first<<" "<<pIter->second<<endl;
+		//cout<<pIter._Rb_tree_iterator()<<endl;
+		/*for(j = 0;j < 20;j++)
+		{
+			cout<<callInfoList[i].func[j]->name<<endl;
+		}*/
+	}
+}
 /**
  * 判断字符串中是否有跳转指令
  */
@@ -212,7 +226,7 @@ int jumpDetection(ifstream& file)
 }
 
 //对容器中的函数地址进行比较，是sort函数的比较规则
-bool cmpAddr(const struct funcInfo &a, const struct funcInfo &b)
+bool cmpAddr(const funcInfo &a, const funcInfo &b)
 {
 	return a.address < b.address;
 }
@@ -265,7 +279,7 @@ int lineNumResolu(ifstream& file)
 		}
 	}
 	//多加一项
-	struct funcInfo * func = new funcInfo;
+	funcInfo * func = new funcInfo;
 	func->lineNum = 4525;
 	funclist.push_back(*func);
 //#define debug
@@ -341,5 +355,6 @@ int disassemblyAnalysis(string dumpFilePath)
 		cout<<"Jump parsing failed"<<endl;
 		return -1;
 	}
+	funcPrint();
 	return 0;
 }
