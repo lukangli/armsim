@@ -179,50 +179,36 @@ void traversTheContainer(string &str,int& line)
 		}
 	}
 }
-void recursivePrint(string & str)
+
+string gblank="    ";
+
+void recursivePrint(string & str, string blank)
 {
+	cout<<blank<<"|---"<<str;
+	blank += gblank;
+
 	map<string,vector<string>>::iterator pIter;
 	pIter = mainFunc.find(str);
-	//如果找到打印并继续进行查找
-	if(pIter != mainFunc.end())
-	{
-		cout<<str<<":"<<endl;
-		for(int i = 0;i < (int)pIter->second.size();i++)
-		{
-			cout<<"    "<<pIter->second[i]<<endl;
-			recursivePrint(pIter->second[i]);
-		}
-	}
-	else
-	{
-		cout<<" ";
+	if(pIter == mainFunc.end())	{
+		cout<<"*"<<endl;   // 系统函数或者第三方（只有函数名)
 		return;
+	}
+	cout<<endl;
+
+	//如果找到打印并继续进行查找
+	for(int i = 0;i < (int)pIter->second.size();i++){
+		recursivePrint(pIter->second[i],blank);
 	}
 }
 
 void funcCallPrint()
 {
 	map<string,vector<string>>::iterator pIter;
-	/*for(pIter = mainFunc.begin(); pIter != mainFunc.end();pIter++)
-	{
-		cout<<"函数名:"<<pIter->first<<endl;
-		for(int i = 0;i < (int)pIter->second.size();i++)
-		{
-			cout<<"    "<<pIter->second[i]<<endl;
-		}
-	}*/
 	//先找到函数的入口，然后递归打印函数的调用关系图
-	pIter = mainFunc.find("main");
-	if(pIter != mainFunc.end())
-	{
-		cout<<"main:"<<endl;
-		for(int i = 0; i < (int)pIter->second.size(); i++)
-		{
-			cout<<pIter->second[i]<<endl;
-			recursivePrint(pIter->second[i]);
-		}
-	}
+	string main="main";
+	recursivePrint(main, "");
 }
+
 /**
  * 判断字符串中是否有跳转指令
  */
