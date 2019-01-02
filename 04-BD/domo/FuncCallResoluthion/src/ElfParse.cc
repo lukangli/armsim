@@ -128,70 +128,88 @@ int symbolTableAnalysis(string listFilePath)
 	symbolTableFile.close();
 	return 0;
 }
-vector<callInfo>callInfoList; //保存函数调用关系信息的容器
-
-map<string,int>mainFunc; //主调函数
+map<string,vector<string>>mainFunc;
+vector<string>* callFunc;
 /**
  * 遍历容器，判断所给字符串是否是容器中的函数
+ * 将得到的字符串存放到map中
  */
-void traversTheContainer(const char * str,int& line)
+void traversTheContainer(string &str,int& line)
 {
 	int i = 0;
 	int j = 0;
 	int ret = 0;
+	string info;
+	map<string,vector<string>>::iterator iter;
+	vector<string>::iterator pIter;
 	for(i = 0; i < (int)funclist.size(); i++)
 	{
-		ret = strcmp(funclist[i].name.data(),str);
+		ret = strcmp(funclist[i].name.data(),str.data());
 		//这里需要多加一个字符串判空，去掉多余的不是函数调用的串
-		if((0 == ret) && (0 != strlen(str)))
+		if((0 == ret) && (0 != strlen(str.data())))
 		{
 			//遍历容器选出在一个函数内调用的函数
 			for(j = 0;j < (int)funclist.size(); j++)
 			{
+				//根据行号确定函数的边界
 				if(funclist[j].lineNum < line && funclist[j+1].lineNum > line)
 				{
-					static int num = 0;
-					mainFunc.insert(map<string,int>::value_type(funclist[j].name,num++));
-					//cout<<funclist[j].name<<" "<<funclist[i].name<<" "<<line+6<<endl;
+					//主调函数做键，它调用的函数列表做值
+					iter = mainFunc.find(funclist[j].name);
+					if(iter == mainFunc.end())
+					{
+						//当前map里没有此函数时，先new一个此函数的调用列表
+						callFunc = new vector<string>;
+						callFunc->push_back(funclist[i].name);
+						//将主调函数和调用函数列表加入map
+						mainFunc.insert(map<string,vector<string>>::value_type(funclist[j].name,*callFunc));
+					}
+					else
+					{
+						//map里有此主调函数时，先查找调用函数列表里有无此函数
+						pIter = find(iter->second.begin(),iter->second.end(),funclist[i].name);
+						//如果没有再添加
+						if(pIter == iter->second.end())
+						{
+							iter->second.push_back(funclist[i].name);
+						}
+					}
 				}
 			}
 		}
 	}
 }
 
-void funcPrint()
+void funcCallPrint()
 {
-	map<string,int>::iterator pIter;
+	map<string,vector<string>>::iterator pIter;
 	for(pIter = mainFunc.begin(); pIter != mainFunc.end();pIter++)
 	{
-		cout<<pIter->first<<" "<<pIter->second<<endl;
-		//cout<<pIter._Rb_tree_iterator()<<endl;
-		/*for(j = 0;j < 20;j++)
+		cout<<"函数名:"<<pIter->first<<endl;
+		for(int i = 0;i < (int)pIter->second.size();i++)
 		{
-			cout<<callInfoList[i].func[j]->name<<endl;
-		}*/
+			cout<<"    "<<pIter->second[i]<<endl;
+		}
 	}
 }
 /**
  * 判断字符串中是否有跳转指令
  */
-void strMatch(char* data, int& line)
+int strMatch(string &str, int& line)
 {
 	int i = 0;
-	string str(data);
 	string::size_type position = 0; //find函数的返回标志
 	char jumpInstruc[2][10] = {"bl","b.n"}; //跳转指令数组
-	char arr[100] = {0};
 	for(i = 0; i < 2; i++)
 	{
 		position = str.find(jumpInstruc[i]);
 		if(position != str.npos)
 		{
-			sscanf(data,"%*[^<]<%[^>]",arr);
-			//cout<<arr<<endl;
-			traversTheContainer(arr,line);
+			//如果有跳转指令返回
+			return 0;
 		}
 	}
+	return -1;
 }
 /**
  * 函数名： jumpDetection
@@ -210,12 +228,27 @@ int jumpDetection(ifstream& file)
 	}
 	//记录行号
 	int record = 0;
+	int ret = 0;
 	char data[255] = {0};
+	string str;
 	while(true)
 	{
 		//获取一行进行解析
 		file.getline(data,sizeof(data));
-		strMatch(data,record);
+		str = data;
+		memset(data,0,sizeof(data));
+		ret = strMatch(str,record);
+		if(0 == ret)
+		{
+			/*一行函数调用信息如下：
+			 * 需要得到<>中的函数名
+			 *      282:	f000 fba5 	bl	9d0 <printk>
+			 * 方法如下：用sscanf
+			 */
+			sscanf(str.data(),"%*[^<]<%[^>]",data);
+			str = data;
+			traversTheContainer(str,record);
+		}
 		if(file.eof())
 		{
 			break;
@@ -355,6 +388,7 @@ int disassemblyAnalysis(string dumpFilePath)
 		cout<<"Jump parsing failed"<<endl;
 		return -1;
 	}
-	funcPrint();
+	//打印结果
+	funcCallPrint();
 	return 0;
 }
