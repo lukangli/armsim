@@ -180,9 +180,9 @@ void traversTheContainer(string &str,int& line)
 	}
 }
 
-string gblank="    ";
+//string gblank="    ";
 
-void recursivePrint(string & str, string blank)
+/*void recursivePrint(string & str, string blank)
 {
 	cout<<blank<<"|---"<<str;
 	blank += gblank;
@@ -199,14 +199,33 @@ void recursivePrint(string & str, string blank)
 	for(int i = 0;i < (int)pIter->second.size();i++){
 		recursivePrint(pIter->second[i],blank);
 	}
+}*/
+void recursivePrint(string & str, int blk)
+{
+	map<string,vector<string>>::iterator pIter;
+	for(int i=0;i<blk;i++)printf("|---");//缩进
+	printf("|—<%s>", str.data());//打印"|—<id>"形式
+	pIter = mainFunc.find(str);
+	if(pIter == mainFunc.end())	{
+		//cout<<"*"<<endl;   // 系统函数或者第三方（只有函数名)
+		printf("*\n");
+		return;
+	}
+	printf("\n");
+	//如果找到打印并继续进行查找
+	for(int i = 0;i < (int)pIter->second.size();i++){
+		recursivePrint(pIter->second[i],blk+1);
+	}
 }
+
 
 void funcCallPrint()
 {
 	map<string,vector<string>>::iterator pIter;
 	//先找到函数的入口，然后递归打印函数的调用关系图
 	string main="main";
-	recursivePrint(main, "");
+	int blk = 0;
+	recursivePrint(main,blk);
 }
 
 /**
